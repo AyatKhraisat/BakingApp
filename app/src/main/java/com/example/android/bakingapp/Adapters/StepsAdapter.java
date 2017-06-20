@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
@@ -21,9 +22,9 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,14 +36,12 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
     private Context mContext;
     private List<Steps> mSteps;
-    private StepsViewHolder mHolder;
 
 
     public StepsAdapter(List<Steps> steps, Context context) {
-        mSteps = new ArrayList<>();
         mSteps = steps;
         mContext = context;
-   }
+    }
 
     @Override
     public int getItemCount() {
@@ -69,14 +68,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onBindViewHolder(final StepsViewHolder holder, int position) {
         if (mSteps != null) {
-            mHolder = holder;
             holder.stepName.setText(mSteps.get(position).getShortDescription());
             holder.stepDes.setText(mSteps.get(position).getDescription());
+            String imageURL = mSteps.get(position).getThumbnailURL();
+            if (!TextUtils.isEmpty(imageURL))
+                Picasso.with(mContext).load(imageURL).into(holder.thumbStep);
+            else holder.thumbStep.setVisibility(View.GONE);
             final Uri mp4VideoUri = Uri.parse(mSteps.get(position).getVideoURL());
-
             holder.simpleExoPlayerView.requestFocus();
-            //initPlayer();
-
             holder.simpleExoPlayerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 SimpleExoPlayer player;
 
@@ -89,7 +88,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
                         MediaSource mediaSource = new ExtractorMediaSource(mp4VideoUri, new DefaultDataSourceFactory(mContext, userAgent), new DefaultExtractorsFactory(), null, null);
                         player.prepare(mediaSource);
                         player.setPlayWhenReady(false);
-
                         holder.simpleExoPlayerView.setPlayer(player);
                     } else {
                         holder.simpleExoPlayerView.setVisibility(View.GONE);
@@ -102,7 +100,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
                     if (player != null) {
                         player.stop();
                         player.release();
-                        // player = null;
                     }
                 }
             });
@@ -110,20 +107,19 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     }
 
 
-
-
     public class StepsViewHolder extends RecyclerView.ViewHolder {
 
         private TextView stepName;
         private TextView stepDes;
         private SimpleExoPlayerView simpleExoPlayerView;
+        private ImageView thumbStep;
 
         public StepsViewHolder(View itemView) throws MalformedURLException {
             super(itemView);
             simpleExoPlayerView = (SimpleExoPlayerView) itemView.findViewById(R.id.player_view);
-
             stepName = (TextView) itemView.findViewById(R.id.tv_step_name);
             stepDes = (TextView) itemView.findViewById(R.id.tv_step_description);
+            thumbStep = (ImageView) itemView.findViewById(R.id.iv_step_image);
         }
 
 
