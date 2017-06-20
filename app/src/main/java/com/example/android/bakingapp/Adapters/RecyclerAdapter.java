@@ -3,13 +3,17 @@ package com.example.android.bakingapp.Adapters;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.model.Ingredients;
 import com.example.android.bakingapp.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -20,7 +24,7 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecipeViewHolder> {
 
     public interface ListItemClickListener {
-        void onListItemClick(int clickedItemIndex);
+        void onListItemClick(Recipe clickedItemIndex);
     }
 
     final private ListItemClickListener mOnClickListener;
@@ -60,8 +64,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recipe
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
         if (mRecipes != null) {
-          String x=mRecipes.get(position).getName();
-             holder.recipeName.setText(mRecipes.get(position).getName());
+            holder.recipeName.setText(mRecipes.get(position).getName());
+            List<Ingredients> ingredients = mRecipes.get(position).getIngredients();
+            holder.recipeIng.setText("");
+            if (ingredients != null) {
+                for (int i = 0; i < ingredients.size(); i++) {
+                    holder.recipeIng.append(ingredients.get(i).getQuantity() + " ");
+                    holder.recipeIng.append(ingredients.get(i).getMeasure() + " ");
+                    holder.recipeIng.append(ingredients.get(i).getIngredient());
+                    holder.recipeIng.append("\n");
+                }
+            }
+            String imageURL = mRecipes.get(position).getImage();
+            if (!TextUtils.isEmpty(imageURL))
+                Picasso.with(mContext).load(imageURL).into(holder.recipeImage);
         }
     }
 
@@ -70,19 +86,31 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recipe
             implements View.OnClickListener {
 
         TextView recipeName;
-CardView cv;
+        CardView cv;
+        TextView recipeIng;
+        TextView contSteps;
+        ImageView recipeImage;
+
         public RecipeViewHolder(View itemView) {
             super(itemView);
             recipeName = (TextView) itemView.findViewById(R.id.tv_recipe_title);
-            cv = (CardView)itemView.findViewById(R.id.cv);
+            cv = (CardView) itemView.findViewById(R.id.cv);
             itemView.setOnClickListener(this);
+            recipeIng = (TextView) itemView.findViewById(R.id.tv_ingredientss);
+            contSteps = (TextView) itemView.findViewById(R.id.tv_cont_to_steps);
+            recipeImage = (ImageView) itemView.findViewById(R.id.iv_recipe_image);
         }
 
 
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-            mOnClickListener.onListItemClick(clickedPosition);
+            Recipe recipe = mRecipes.get(clickedPosition);
+            List<Ingredients> ingredients = recipe.getIngredients();
+
+            mOnClickListener.onListItemClick(recipe);
         }
+
     }
+
 }
