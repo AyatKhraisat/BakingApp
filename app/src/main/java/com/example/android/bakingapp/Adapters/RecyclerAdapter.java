@@ -1,7 +1,6 @@
 package com.example.android.bakingapp.Adapters;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -86,18 +85,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recipe
             implements View.OnClickListener {
 
         TextView recipeName;
-        CardView cv;
         TextView recipeIng;
-        TextView contSteps;
         ImageView recipeImage;
 
         public RecipeViewHolder(View itemView) {
             super(itemView);
             recipeName = (TextView) itemView.findViewById(R.id.tv_recipe_title);
-            cv = (CardView) itemView.findViewById(R.id.cv);
             itemView.setOnClickListener(this);
             recipeIng = (TextView) itemView.findViewById(R.id.tv_ingredientss);
-            contSteps = (TextView) itemView.findViewById(R.id.tv_cont_to_steps);
             recipeImage = (ImageView) itemView.findViewById(R.id.iv_recipe_image);
         }
 

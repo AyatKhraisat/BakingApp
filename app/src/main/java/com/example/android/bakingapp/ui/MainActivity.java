@@ -21,7 +21,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity implements RecipesListFragment.OnRecipeClickListener {
 
    private boolean mTwoPane;
-    private ArrayList<Steps> mSteps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +31,7 @@ public class MainActivity extends AppCompatActivity implements RecipesListFragme
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             StepsFragment stepsFragment = new StepsFragment();
-            stepsFragment.setmSteps(mSteps);
-            fragmentManager.beginTransaction().add(R.id.steps_container, stepsFragment).commit();
+           fragmentManager.beginTransaction().add(R.id.steps_container, stepsFragment).commit();
 
         }
     }

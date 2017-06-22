@@ -23,9 +23,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         this.context = context;
     }
 
-    private void populateListItem() {
 
-    }
 
     @Override
     public void onCreate() {
