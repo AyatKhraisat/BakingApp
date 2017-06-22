@@ -14,6 +14,7 @@ import java.util.List;
 public class RecipeActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     StepsFragment stepsFragment;
+    private ArrayList<Steps>  mSteps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

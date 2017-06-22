@@ -26,6 +26,7 @@ public class StepsFragment extends Fragment  {
         // Required empty public constructor
     }
 
+
     public void setmSteps(ArrayList<Steps> mSteps) {
         this.mSteps = mSteps;
     }
@@ -33,6 +34,9 @@ public class StepsFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState!=null){
+       mSteps=     savedInstanceState.getParcelableArrayList("steps");
+        }
     }
 
     @Override
@@ -41,6 +45,8 @@ public class StepsFragment extends Fragment  {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
         RecyclerView rvSteps = (RecyclerView) view.findViewById(R.id.rv_steps);
+        RecipeActivity recipeActivity=new RecipeActivity();
+     //  mSteps= recipeActivity.getmSteps();
         if (mSteps != null) {
             stepsAdapter = new StepsAdapter(mSteps, getContext());
             LinearLayoutManager atepsLayoutManager = new LinearLayoutManager(getContext());
@@ -53,6 +59,11 @@ public class StepsFragment extends Fragment  {
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("steps",mSteps);
+    }
 
     @Override
     public void onAttach(Context context) {
